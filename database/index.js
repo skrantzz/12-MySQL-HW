@@ -26,9 +26,17 @@ class DB {
       );
   }
   
-  addEmployee() {
-      console.log('trying to add employee')
+  addNewEmp(firstname, lastname, roleID, managerID) {
+    //   console.log(firstname, lastname, roleID, managerID)
+    return this.connection.query(
+        `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${firstname}", "${lastname}", ${roleID}, ${managerID})`
+    )
   }
+
+  findAllRoles() {
+    return this.connection.query("SELECT * FROM role");
+  }
+
 
 }
 
