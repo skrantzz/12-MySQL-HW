@@ -8,12 +8,47 @@
 
 var inquirer = require("inquirer");
 var db = require("./database");
+const cTable = require('console.table');
 
-async function viewAllTest() {
+async function viewAllEmp() {
   const employees = await db.findAllEmployees();
-  console.log(employees);
+  console.table(employees);
   askUser();
 }
+
+async function viewEmpByDept() {
+  const empByDept = await db.findEmpByDept();
+  console.table(empByDept);
+}
+
+async function viewEmpByManager() {
+  const empByManager = await db.findEmpByManager();
+  console.table(empByManager);
+}
+
+async function addEmp() {
+  const addEmployee = await inquirer.prompt([
+    {
+      type: "input",
+      name: "newEmpFN",
+      message: "What is the employee's first name?"
+    },
+    {
+      type: "input",
+      name: "newEmpLN",
+      message: "What is the employee's last name?"
+    }
+    var newEmpFN = addEmployee.newEmpFN;
+    var newEmpLN = addEmployee.newEmpLN;
+    
+    console.log(newEmpFN, newEmpLN);
+  ]);
+  
+}
+
+// async function addEmployee() {
+//   const addEmp
+// }
 
 
 async function askUser() {
@@ -57,15 +92,39 @@ async function askUser() {
   
   // value is what answer.choice will point to
   console.log(answer);
-  if (answer.choice === "allEmployees") {
-      viewAllTest();
-  }
+  switch (answer.choice) {
+    case "allEmployees":
+      viewAllEmp();
+      break;
 
+      case "empByDept":
+        viewEmpByDept();
+        break;
+
+        case "empByManager":
+          viewEmpByManager();
+          break;
+
+        case "addEmp":
+          addEmp();
+          break;
+  }
+  
 }
+    // if (answer.choice === "allEmployees") {
+    //     viewAllTest();
+    // }
 askUser();
 
 // only work on this file and the index.js in DB
 // write switch case for all diff choices with a bunch of async functions that use the db class 
-// for remove, youre going to want to pass in for each employee concat first name and last name together and pass into the choices, create list in inqu.
+// for remove, youre going to want to pass in for each employee concat first name and last name together and pass into the choices, create list in inqu. - 
+
+// 
+
+// make sure you ask for first and last name after user selects to delete a person.... then look up how to delete specfic entries out of table.. look up how to pass 
+
 // create dynamic lists within inqur. so that it represents by the DB
 // when hard code in the seed file 7 emps
+
+// call function siwtch case is in .then, listing all functions 
