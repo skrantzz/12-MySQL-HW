@@ -16,30 +16,31 @@ class DB {
 
   findEmpByDept() {
     return this.connection.query(
-      "SELECT employee.id, name, first_name, last_name, role_id, manager_id, title, salary, department_id FROM employee INNER JOIN role on role_id INNER JOIN department on department_id"
+      "SELECT employee.id, name AS department, first_name, last_name, title, salary FROM employee INNER JOIN role on employee.role_id = role.id INNER JOIN department on role.department_id = department.id"
     );
   }
 
   findEmpByManager() {
-      return this.connection.query(
-          "SELECT manager_id, employee.id, first_name, last_name, role_id FROM employee"
-      );
+    return this.connection.query(
+      "SELECT manager_id, employee.id, first_name, last_name, role_id FROM employee"
+    );
   }
-  
+
   addNewEmp(firstname, lastname, roleID, managerID) {
     //   console.log(firstname, lastname, roleID, managerID)
     return this.connection.query(
-        `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${firstname}", "${lastname}", ${roleID}, ${managerID})`
-    )
+      `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${firstname}", "${lastname}", ${roleID}, ${managerID})`
+    );
   }
 
   findAllRoles() {
     return this.connection.query("SELECT * FROM role");
   }
 
-
-}
-
+  removeEmployee(removedID) {
+     this.connection.query(`DELETE from employee WHERE id = ${removedID}`)
+  }
+};
 module.exports = new DB(connection);
 // this new db connection is shorthand - auto exports class constructor
 

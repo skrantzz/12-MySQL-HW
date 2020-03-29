@@ -27,6 +27,7 @@ async function viewEmpByManager() {
   console.table(empByManager);
   askUser();
 }
+// ------ add employee -----
 
 async function addEmp() {
   var roles = await db.findAllRoles();
@@ -70,14 +71,45 @@ async function addEmp() {
   // const newEmpLast = addEmployee.newEmpLN;
   // const newRoleID = addEmployee.newEmpRole;
   // const newEmpManager = addEmployee.newEmpManager;
-  const addNewEmpVar = await db.addNewEmp(newEmpFN, newEmpLN, newEmpRole, newEmpManager);
-  console.log("New employee added!")
+  const addNewEmpVar = await db.addNewEmp(
+    newEmpFN,
+    newEmpLN,
+    newEmpRole,
+    newEmpManager
+  );
+  console.log("New employee added, yooo!");
   askUser();
 }
 
 // async function addEmployee() {
 //   const addEmp
 // }
+
+// ------ remove employee ------
+
+async function removeEmp() {
+  var employees = await db.findAllEmployees();
+  var employeeChoices = employees.map(function(employee) {
+    return {
+      name: `${employee.first_name} ${employee.last_name}`,
+      value: employee.id
+    };
+  });
+
+  const removeEmployee = await inquirer.prompt([
+    {
+      type: "list",
+      name: "removeEmp",
+      message: "Which employee would you like to remove?",
+      choices: employeeChoices
+    }
+  ]);
+  const { removeEmp } = removeEmployee;
+
+  var removeEmpVar = await db.removeEmployee(removeEmp);
+  console.log("Employee gone, bitch!")
+  askUser();
+}
 
 async function askUser() {
   const answer = await inquirer.prompt([
@@ -136,11 +168,13 @@ async function askUser() {
     case "addEmp":
       addEmp();
       break;
+
+    case "removeEmp":
+      removeEmp();
+      break;
   }
 }
-// if (answer.choice === "allEmployees") {
-//     viewAllTest();
-// }
+
 askUser();
 
 // only work on this file and the index.js in DB
